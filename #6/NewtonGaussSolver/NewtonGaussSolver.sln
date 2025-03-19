@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35913.81 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewtonGaussSolver", "NewtonGaussSolver.csproj", "{A21E5284-6544-4900-A0FD-DFD123F99AEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A21E5284-6544-4900-A0FD-DFD123F99AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A21E5284-6544-4900-A0FD-DFD123F99AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A21E5284-6544-4900-A0FD-DFD123F99AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A21E5284-6544-4900-A0FD-DFD123F99AEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0CEF1D07-9FA2-4D8C-99AE-243DE5EB88B1}
+	EndGlobalSection
+EndGlobal
