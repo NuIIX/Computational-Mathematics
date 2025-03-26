@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35913.81 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterpolationProject", "InterpolationProject.csproj", "{2A555EB6-763B-4D98-BCEB-A95C25E1A037}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plotter", "..\Plotter\Plotter.csproj", "{C6930417-3A7F-4A45-A8A5-BD6EDD3D9336}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A555EB6-763B-4D98-BCEB-A95C25E1A037}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A555EB6-763B-4D98-BCEB-A95C25E1A037}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A555EB6-763B-4D98-BCEB-A95C25E1A037}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A555EB6-763B-4D98-BCEB-A95C25E1A037}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6930417-3A7F-4A45-A8A5-BD6EDD3D9336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6930417-3A7F-4A45-A8A5-BD6EDD3D9336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6930417-3A7F-4A45-A8A5-BD6EDD3D9336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6930417-3A7F-4A45-A8A5-BD6EDD3D9336}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EDB2ED9D-12F2-493D-9756-435932CBBBD9}
+	EndGlobalSection
+EndGlobal
