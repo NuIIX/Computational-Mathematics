@@ -1,66 +1,66 @@
 ﻿namespace _3
 {
-    internal class SimpleIterationSolver
+    public class SimpleIterationSolver
     {
-        protected double[,] coefficientsMatrix; // A
-        protected double[] constantsVector;     // b
-        protected double[,] iterationMatrix;    // C
-        protected double[] iterationVector;     // B
-        protected double epsilon;
-        protected int maxIterations;
+        protected double[,] _coefficientsMatrix; 
+        protected double[] _constantsVector;
+        protected double[,] _iterationMatrix;
+        protected double[] _iterationVector;
+        protected double _epsilon;
+        protected int _maxIterations;
 
         public SimpleIterationSolver(double[,] matrix, double[] results, double epsilon = 1e-4, int maxIterations = 100)
         {
             int size = matrix.GetLength(0);
-            coefficientsMatrix = matrix;
-            constantsVector = results;
-            this.epsilon = epsilon;
-            this.maxIterations = maxIterations;
+            _coefficientsMatrix = matrix;
+            _constantsVector = results;
+            _epsilon = epsilon;
+            _maxIterations = maxIterations;
 
-            iterationMatrix = new double[size, size];
-            iterationVector = new double[size];
+            _iterationMatrix = new double[size, size];
+            _iterationVector = new double[size];
 
             ComputeIterationParameters();
         }
 
         private void ComputeIterationParameters()
         {
-            int size = coefficientsMatrix.GetLength(0);
+            int size = _coefficientsMatrix.GetLength(0);
 
             for (int i = 0; i < size; i++)
             {
-                double diagonalElement = coefficientsMatrix[i, i];
+                double diagonalElement = _coefficientsMatrix[i, i];
 
                 for (int j = 0; j < size; j++)
                 {
-                    iterationMatrix[i, j] = i == j ? 1 : coefficientsMatrix[i, j] / diagonalElement;
+                    _iterationMatrix[i, j] = i == j ? 1 : _coefficientsMatrix[i, j] / diagonalElement;
                 }
 
-                iterationVector[i] = constantsVector[i] / diagonalElement;
+                _iterationVector[i] = _constantsVector[i] / diagonalElement;
             }
         }
 
         public virtual void Solve()
         {
-            int size = coefficientsMatrix.GetLength(0);
+            int size = _coefficientsMatrix.GetLength(0);
             double[] previousSolution = new double[size];
             double[] currentSolution = new double[size];
 
-            PrintMatrix(iterationMatrix, "\nМатрица итераций C:");
-            PrintVector(iterationVector, "\nВектор правой части B:");
+            PrintMatrix(_iterationMatrix, "\nМатрица итераций C:");
+            PrintVector(_iterationVector, "\nВектор правой части B:");
             PrintVector(previousSolution, "\nНачальный вектор x:");
 
-            for (int iteration = 0; iteration < maxIterations; iteration++)
+            for (int iteration = 0; iteration < _maxIterations; iteration++)
             {
                 for (int i = 0; i < size; i++)
                 {
-                    currentSolution[i] = iterationVector[i];
+                    currentSolution[i] = _iterationVector[i];
 
                     for (int j = 0; j < size; j++)
                     {
                         if (i != j)
                         {
-                            currentSolution[i] += iterationMatrix[i, j] * previousSolution[j];
+                            currentSolution[i] += _iterationMatrix[i, j] * previousSolution[j];
                         }
                     }
                 }
@@ -70,6 +70,7 @@
                 if (HasConverged(previousSolution, currentSolution))
                 {
                     PrintVector(currentSolution, "\nРешение найдено:");
+
                     return;
                 }
 
@@ -83,7 +84,7 @@
         {
             for (int i = 0; i < oldSolution.Length; i++)
             {
-                if (Math.Abs(newSolution[i] - oldSolution[i]) > epsilon)
+                if (Math.Abs(newSolution[i] - oldSolution[i]) > _epsilon)
                 {
                     return false;
                 }

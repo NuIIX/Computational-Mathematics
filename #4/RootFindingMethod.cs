@@ -1,9 +1,11 @@
-﻿namespace _4
+﻿using Shared;
+
+namespace _4
 {
     public abstract class RootFindingMethod : FunctionBase
     {
         public RootFindingMethod(Func<double, double> function, double tolerance = 1e-6)
-            : base(function, null, tolerance) { }
+            : base(function, tolerance: tolerance) { }
 
         public abstract double Solve(double a, double b);
 

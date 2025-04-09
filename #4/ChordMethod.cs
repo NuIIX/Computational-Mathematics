@@ -14,7 +14,7 @@
         {
             if (_function(a) * _function(b) >= 0)
             {
-                throw new ArgumentException("Функция должна иметь разные знаки на концах интервала.");
+                throw new ArgumentException("Функция должна иметь разные знаки на концах интервала");
             }
 
             Console.WriteLine($"Начальный интервал: [{Round(a)}; {Round(b)}]");

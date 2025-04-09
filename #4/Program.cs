@@ -2,7 +2,7 @@
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Func<double, double> function = x => x * x - 3, derivative = x => 2 * x;
             const double tolerance = 1e-4;

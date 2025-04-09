@@ -1,4 +1,6 @@
-﻿namespace _4
+﻿using Shared;
+
+namespace _4
 {
     public class NewtonMethod : FunctionBase
     {

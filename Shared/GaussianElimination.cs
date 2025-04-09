@@ -1,11 +1,19 @@
-﻿namespace _1
+﻿namespace Shared
 {
-    public class ModifiedGaussianElimination : GaussianElimination
+    public class GaussianElimination
     {
-        public ModifiedGaussianElimination(double[,] inputMatrix, double[] inputResults)
-            : base(inputMatrix, inputResults) { }
+        private int _size;
+        private double[,] _matrix;
+        private double[] _results;
 
-        public override void ConvertToLowerTriangular()
+        public GaussianElimination(double[,] inputMatrix, double[] inputResults)
+        {
+            _size = inputMatrix.GetLength(0);
+            _matrix = (double[,])inputMatrix.Clone();
+            _results = (double[])inputResults.Clone();
+        }
+
+        private void ConvertToLowerTriangular()
         {
             for (int i = 0; i < _size - 1; i++)
             {
@@ -52,6 +60,32 @@
                 _results[col] = _results[maxRow];
                 _results[maxRow] = tempResult;
             }
+        }
+
+        private double[] BackSubstitution()
+        {
+            double[] solution = new double[_size];
+
+            for (int i = _size - 1; i >= 0; i--)
+            {
+                double sum = _results[i];
+
+                for (int j = i + 1; j < _size; j++)
+                {
+                    sum -= _matrix[i, j] * solution[j];
+                }
+
+                solution[i] = sum / _matrix[i, i];
+            }
+
+            return solution;
+        }
+
+        public double[] Solve()
+        {
+            ConvertToLowerTriangular();
+
+            return BackSubstitution();
         }
     }
 }

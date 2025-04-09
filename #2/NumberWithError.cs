@@ -1,6 +1,6 @@
 ﻿namespace _2
 {
-    internal class NumberWithError
+    public class NumberWithError
     {
         public double Value { get; }
         public double Error { get; }
@@ -9,12 +9,12 @@
         {
             if (double.IsNaN(value) || double.IsInfinity(value))
             {
-                throw new ArgumentException("Значение не должно быть NaN или Inf!");
+                throw new ArgumentException("Значение не должно быть NaN или Inf");
             }
 
             if (error < 0)
             {
-                throw new ArgumentException("Погрешность должна быть больше нуля!");
+                throw new ArgumentException("Погрешность должна быть больше нуля");
             }
 
             Value = value;
@@ -48,7 +48,7 @@
         public static NumberWithError operator /(NumberWithError a, NumberWithError b)
         {
             if (b.Value == 0) {
-                throw new DivideByZeroException("Деление на ноль!");
+                throw new DivideByZeroException("Деление на ноль");
             }
 
             if (a.Value == 0) {
@@ -65,7 +65,7 @@
         public NumberWithError Pow(double power)
         {
             if (Value < 0 && power % 1 != 0) {
-                throw new ArgumentException("Нельзя возвести отрицательное число в нецелочисленную степень!");
+                throw new ArgumentException("Нельзя возвести отрицательное число в нецелочисленную степень");
             }
 
             double newValue = Math.Pow(Value, power);
@@ -78,7 +78,7 @@
         public NumberWithError Pow(NumberWithError power)
         {
             if (Value <= 0) {
-                throw new ArgumentException("Значение должно быть больше нуля!");
+                throw new ArgumentException("Значение должно быть больше нуля");
             }
 
             NumberWithError exponentPower = Ln() * power;
@@ -91,7 +91,7 @@
         public NumberWithError Sqrt()
         {
             if (Value < 0) {
-                throw new ArgumentException("Нельзя вычислить корень из отрицательного числа!");
+                throw new ArgumentException("Нельзя вычислить корень из отрицательного числа");
             }
 
             return Pow(0.5);
@@ -116,7 +116,7 @@
         public NumberWithError Ln()
         {
             if (Value <= 0) {
-                throw new ArgumentException("Нельзя вычислить логарифм из отрицательного числа!");
+                throw new ArgumentException("Нельзя вычислить логарифм из отрицательного числа");
             }
 
             double newValue = Math.Log(Value);
