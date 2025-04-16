@@ -1,11 +1,13 @@
-﻿namespace _6
+﻿using Shared;
+
+namespace _6
 {
-    public class EitkenInterpolation : InterpolationBase
+    public class EitkenInterpolation : InterpolationBase<double>
     {
         public EitkenInterpolation(List<(double x, double y)> dataPoints)
             : base(dataPoints) { }
 
-        public double Compute(double x, bool useWrite = true)
+        public override double Compute(double x, bool useWrite = true)
         {
             double[,] p = new double[PointsCount, PointsCount];
 

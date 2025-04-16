@@ -1,6 +1,8 @@
-﻿namespace _6
+﻿using Shared;
+
+namespace _6
 {
-    public class NewtonInterpolation : InterpolationBase
+    public abstract class NewtonInterpolation<TResult> : InterpolationBase<TResult>
     {
         protected double[,] _differenceTable;
 
@@ -82,5 +84,7 @@
 
             Console.WriteLine();
         }
+
+        public abstract override TResult Compute(double x, bool useWrite = true);
     }
 }

@@ -1,9 +1,8 @@
-﻿using _6;
-using Shared;
+﻿using Shared;
 
 namespace _7
 {
-    public class CubicSplineInterpolation : InterpolationBase
+    public class CubicSplineInterpolation : InterpolationBase<double>
     {
         private double[] _segmentLengths;
         private double[] _slopes;
@@ -71,7 +70,7 @@ namespace _7
             Console.WriteLine(string.Join("; ", _splineCoefficients));
         }
 
-        public double Compute(double x, bool useWrite = true)
+        public override double Compute(double x, bool useWrite = true)
         {
             int index = FindSegment(x);
 

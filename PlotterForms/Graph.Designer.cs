@@ -29,11 +29,14 @@
         private void InitializeComponent()
         {
             SuspendLayout();
+            // 
+            // Graph
+            // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Name = "График";
-            Text = "График";
+            Name = "Graph";
+            Text = "Graph";
             WindowState = FormWindowState.Maximized;
             ResumeLayout(false);
         }

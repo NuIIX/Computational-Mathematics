@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace _6
+﻿namespace Shared
 {
-    public abstract class InterpolationBase
+    public abstract class InterpolationBase<TResult>
     {
         protected List<(double x, double y)> _points;
 
@@ -22,10 +16,11 @@ namespace _6
             _points = points.OrderBy(p => p.x).ToList();
         }
 
+        public List<(double x, double y)> GetPoints() => _points;
         protected (double x, double y) GetPoint(int index) => _points[index];
-
         protected double GetX(int index) => _points[index].x;
-
         protected double GetY(int index) => _points[index].y;
+
+        public abstract TResult Compute(double x, bool useWrite = true);
     }
 }

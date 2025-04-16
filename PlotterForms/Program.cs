@@ -1,3 +1,5 @@
+using Shared;
+
 namespace PlotterForms
 {
     public static class Program
@@ -34,6 +36,8 @@ namespace PlotterForms
             {
                 form.PlotPoints(data);
             }
+
+            form.ShowLegendTable();
 
             Application.Run(form);
         }

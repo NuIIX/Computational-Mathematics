@@ -1,11 +1,13 @@
-﻿namespace _6
+﻿using Shared;
+
+namespace _6
 {
-    public class LagrangeInterpolation : InterpolationBase
+    public class LagrangeInterpolation : InterpolationBase<double>
     {
         public LagrangeInterpolation(List<(double x, double y)> dataPoints)
             : base(dataPoints) { }
 
-        public double Compute(double x, bool useWrite = true)
+        public override double Compute(double x, bool useWrite = true)
         {
             double result = 0;
 
@@ -18,11 +20,13 @@
                     if (i != j)
                     {
                         term *= (x - _points[j].x) / (_points[i].x- _points[j].x);
+
                         if (useWrite) Console.Write($"(x - {_points[j].x}) / ({_points[i].x} - {_points[j].x}) * ");
                     }
                 }
 
                 result += term;
+
                 if (useWrite) Console.WriteLine($"{_points[i].y} -> {term}");
             }
 

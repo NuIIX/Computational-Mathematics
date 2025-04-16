@@ -1,10 +1,10 @@
 ﻿namespace _6
 {
-    public class NewtonForwardInterpolation : NewtonInterpolation
+    public class NewtonForwardInterpolation : NewtonInterpolation<double>
     {
         public NewtonForwardInterpolation(List<(double x, double y)> dataPoints) : base(dataPoints) { }
 
-        public double Compute(double x, bool useWrite = true)
+        public override double Compute(double x, bool useWrite = true)
         {
             double h = _points[1].x - _points[0].x;
             double q = (x - _points[0].x) / h;
