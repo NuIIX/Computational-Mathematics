@@ -42,7 +42,7 @@ namespace PlotterForms
             double dataWidth = maxX - minX;
             double dataHeight = maxY - minY;
 
-            double paddingRatio = 0.1;
+            double paddingRatio = 0.2;
 
             double xPadding = dataWidth * paddingRatio;
             double yPadding = dataHeight * paddingRatio;
