@@ -2,7 +2,7 @@
 {
     class TrapezoidalCalculator : IntegralCalculator
     {
-        public TrapezoidalCalculator(Func<double, double> function, double left, double right, double step, double epsilon = 1e-6)
+        public TrapezoidalCalculator(Func<double, double> function, double left, double right, double step, double epsilon = 1e-8)
             : base(function, left, right, step, epsilon) { }
 
         public override double Compute(bool useWrite = true)

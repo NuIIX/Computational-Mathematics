@@ -5,10 +5,10 @@ namespace _8
 {
     internal static class Program
     {
-        static Func<double, double> function = Math.Sqrt;
+        static Func<double, double> function = x => Math.Pow(x,-1);
 
-        const double xMin = 0.0, xStep = 1.0;
-        const int xCount = 4;
+        const double xMin = 0.5, xStep = 1.0;
+        const int xCount = 5;
 
         static List<(double x, double y)> dataPoints = ListUtils.FillDataPoints(function, xMin, xStep, xCount);
 

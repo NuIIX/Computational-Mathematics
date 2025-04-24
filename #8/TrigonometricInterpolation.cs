@@ -12,22 +12,42 @@ namespace _8
         public TrigonometricInterpolation(List<(double x, double y)> points) : base(points)
         {
             _n = points.Count;
-            _t = points.Last().x - points.First().x + 1;
-            _h = points[1].x - points[0].x;
+
+            if (_n > 1)
+            {
+                _h = points[1].x - points[0].x;
+                _t = _n * _h;
+            }
+            else if (_n == 1)
+            {
+                _h = 0;
+                _t = 0;
+            }
+            else
+            {
+                _h = 0;
+                _t = 0;
+            }
         }
 
         public override Complex Compute(double x, bool useWrite = true)
         {
-            if (useWrite) Console.WriteLine($"n = {_n}\nT = {_t}\nh = {_h}\n");
+            if (_n == 0) return Complex.NaN;
+            if (_n == 1) return new Complex(_points[0].y, 0);
 
             double x0 = _points[0].x;
-            double normalizedX = (x - x0) / _h;
+            double x_relative = x - x0;
 
-            if (useWrite) Console.WriteLine($"Найти y({x}) => x0 = {x0}, нормализованный x = {normalizedX}\n");
+            if (useWrite) Console.WriteLine($"n = {_n}\nT = {_t}\nh = {_h}\n");
+            if (useWrite) Console.WriteLine($"Найти y({x}) => x0 = {x0}, относительный x = {x_relative}\n");
 
             Dictionary<int, Complex> A = new Dictionary<int, Complex>();
 
-            for (int j = -_n / 2; j <= _n / 2 - 1; j++)
+            int M = _n / 2;
+            int j_start = -M;
+            int j_end = (_n % 2 != 0) ? M : M - 1;
+
+            for (int j = j_start; j <= j_end; j++)
             {
                 Complex aj = 0;
 
@@ -47,13 +67,14 @@ namespace _8
 
             Complex sum = 0;
 
-            for (int j = -_n / 2; j <= _n / 2 - 1; j++)
+            for (int j = j_start; j <= j_end; j++)
             {
-                double angle = 2 * Math.PI * j * normalizedX / _n;
+                double angle = 2 * Math.PI * j * x_relative / _t;
+
                 Complex exp = Complex.Exp(Complex.ImaginaryOne * angle);
                 Complex term = A[j] * exp;
 
-                if (useWrite) Console.WriteLine($"A_{j} * exp(2 * pi * i * {j} * {normalizedX} / {_n}) = {FormatComplex(term)}");
+                if (useWrite) Console.WriteLine($"A_{j} * exp(2 * pi * i * {j} * {x_relative} / {_t}) = {FormatComplex(term)}");
 
                 sum += term;
             }
@@ -70,31 +91,39 @@ namespace _8
             double re = Math.Round(number.Real, 4);
             double im = Math.Round(number.Imaginary, 4);
 
-            string reStr = re != 0 ? re.ToString() : "";
+            string reStr = re.ToString();
             string imStr = "";
 
-            if (im != 0)
+            if (Math.Abs(im) > 1e-9)
             {
                 string imVal = (Math.Abs(im) == 1 ? "" : Math.Abs(im).ToString());
                 imStr = $"{(im < 0 ? "- " : (re != 0 ? "+ " : ""))}{imVal}i";
             }
 
-            if (re == 0 && im == 0)
+            if (re == 0 && Math.Abs(im) < 1e-9)
             {
                 return "0";
             }
 
-            if (re == 0) 
+            if (re == 0)
             {
-                return imStr.Replace("+-", "-");
+                return imStr.TrimStart('+').Replace("- -", "+ ").Replace("+-", "-");
             }
 
-            if (im == 0)
+            if (Math.Abs(im) < 1e-9)
             {
                 return reStr;
             }
 
-            return $"{reStr} {imStr}";
+            if (re != 0 && imStr.StartsWith("+"))
+            {
+                return $"{reStr} {imStr}";
+            }
+            if (re != 0 && imStr.StartsWith("-"))
+            {
+                return $"{reStr} {imStr.Replace("- ", "-")}";
+            }
+            return $"{reStr}{imStr}";
         }
     }
 }

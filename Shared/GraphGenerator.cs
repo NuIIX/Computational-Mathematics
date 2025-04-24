@@ -143,7 +143,7 @@ namespace Shared
 
             List<GraphParameters> graphData = new()
             {
-                new(viewDataPoints, markerSize: 0, lineWidth: 1, color: Color.LightGray, true, label: "Исходная функция"),
+                new(viewDataPoints, markerSize: 0, lineWidth: 3, color: Color.Green, true, label: "Исходная функция"),
                 new(dataPoints, markerSize: 10, lineWidth: 0, color: Color.Black, label: "Узлы интерполяции")
             };
 

@@ -8,7 +8,7 @@
         protected double _step;
         protected double _epsilon;
 
-        public IntegralCalculator(Func<double, double> function, double left, double right, double step, double epsilon = 1e-6)
+        public IntegralCalculator(Func<double, double> function, double left, double right, double step, double epsilon = 1e-15)
         {
             _function = function;
             _left = left;

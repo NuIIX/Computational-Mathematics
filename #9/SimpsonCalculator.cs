@@ -2,7 +2,7 @@
 {
     class SimpsonCalculator : IntegralCalculator
     {
-        public SimpsonCalculator(Func<double, double> function, double left, double right, double step, double epsilon = 1e-6)
+        public SimpsonCalculator(Func<double, double> function, double left, double right, double step, double epsilon = 1e-8)
             : base(function, left, right, step, epsilon) { }
 
         public override double Compute(bool useWrite = true)
@@ -22,7 +22,7 @@
 
                 iteration++;
 
-                if (useWrite) Console.WriteLine($"\nИтерация {iteration}: шаг = {h}");
+                if (useWrite) Console.WriteLine($"\nИтерация {iteration}: Шаг = {h}");
 
                 for (int i = 1; i < n; i++)
                 {
