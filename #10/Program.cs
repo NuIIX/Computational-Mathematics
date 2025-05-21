@@ -1,27 +1,41 @@
-﻿using _10;
-using Shared;
+﻿using Shared;
 
-internal class Program
+namespace _10
 {
-    static Func<double, double> function = x => Math.Pow(x, 2);
-    static List<Func<double, double>> basis = new()
+    internal class Program
     {
-        x => 1,
-        x => x,
-        Math.Sqrt
-    };
+        static Func<double, double> function = x => Math.Sin(x);
+        static List<Func<double, double>> basis = new()
+        {
+            x => 1,
+            x => x,
+            Math.Sqrt
+        };
 
-    const double xMin = 0.0, xStep = 1;
-    const int xCount = 4;
+        const double xMin = 0.0, xStep = 1.0;
+        const int xCount = 4;
 
-    static List<(double x, double y)> dataPoints = ListUtils.FillDataPoints(function, xMin, xStep, xCount);
+        static List<(double x, double y)> dataPoints = ListUtils.FillDataPoints(function, xMin, xStep, xCount);
 
-    private static void Main(string[] args)
-    {
-        Printer.PrintListAsTable(dataPoints, "Исходные данные");
+        private static void Main(string[] args)
+        {
+            Printer.PrintListAsTable(dataPoints, "Исходные данные для аппроксимации");
 
-        Approximation approximation = new LeastSquaresApproximator(dataPoints, basis);
+            Approximation approximation = new LeastSquaresApproximator(dataPoints, basis);
+            var approximatedFunction = approximation.Compute();
 
-        approximation.Compute();
+            double plotXMin = dataPoints.Min(p => p.x) - xStep * 0.5;
+            double plotXMax = dataPoints.Max(p => p.x) + xStep * 0.5;
+
+            var graphData = GraphGenerator.GenerateApproximationData(
+                function,
+                approximatedFunction,
+                dataPoints,
+                plotXMin,
+                plotXMax
+            );
+
+            PlotterForms.Program.ShowGraph(graphData);
+        }
     }
 }

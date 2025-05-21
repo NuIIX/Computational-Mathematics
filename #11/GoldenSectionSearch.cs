@@ -24,14 +24,13 @@
 
             if (useWrite) Console.WriteLine($"Интервал: [{a}, {b}], шагов: {_steps}");
 
+            double lambda1 = a + Phi1 * (b - a);
+            double lambda2 = a + Phi2 * (b - a);
+            double f1 = _function(lambda1);
+            double f2 = _function(lambda2);
+
             for (int i = 1; i <= _steps; i++)
             {
-                double lambda1 = a + Phi1 * (b - a);
-                double lambda2 = a + Phi2 * (b - a);
-
-                double f1 = _function(lambda1);
-                double f2 = _function(lambda2);
-
                 if (useWrite)
                 {
                     Console.WriteLine($"\nИтерация {i}");
@@ -44,12 +43,22 @@
                 if (f1 > f2)
                 {
                     if (useWrite) Console.WriteLine("f(л1) > f(л2), значит a = л1");
+
                     a = lambda1;
+                    lambda1 = lambda2;
+                    f1 = f2;
+                    lambda2 = a + Phi2 * (b - a);
+                    f2 = _function(lambda2);
                 }
                 else
                 {
                     if (useWrite) Console.WriteLine("f(л1) < f(л2), значит b = л2");
+
                     b = lambda2;
+                    lambda2 = lambda1;
+                    f2 = f1;
+                    lambda1 = a + Phi1 * (b - a);
+                    f1 = _function(lambda1);
                 }
             }
 

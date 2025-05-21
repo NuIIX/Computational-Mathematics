@@ -159,5 +159,89 @@ namespace Shared
 
             return graphData;
         }
+
+        public static List<GraphParameters> GenerateApproximationData(
+            Func<double, double> originalFunction,
+            Func<double, double> approximatedFunction,
+            List<(double x, double y)> inputDataPoints,
+            double xPlotMin,
+            double xPlotMax,
+            int numberOfPlotPoints = 200)
+        {
+            const double marginFactor = 0.1;
+
+            List<(double x, double y)> originalFunctionPlotPoints = new();
+            double plotStep = (xPlotMax - xPlotMin) / (numberOfPlotPoints - 1);
+
+            for (int i = 0; i < numberOfPlotPoints; i++)
+            {
+                double x = xPlotMin + i * plotStep;
+                double y = originalFunction(x);
+                if (double.IsFinite(y) && Math.Abs(y) < 1e6)
+                {
+                    originalFunctionPlotPoints.Add((x, y));
+                }
+            }
+
+            List<(double x, double y)> approximatedFunctionPlotPoints = new();
+            for (int i = 0; i < numberOfPlotPoints; i++)
+            {
+                double x = xPlotMin + i * plotStep;
+                double y = approximatedFunction(x);
+                if (double.IsFinite(y) && Math.Abs(y) < 1e6)
+                {
+                    approximatedFunctionPlotPoints.Add((x, y));
+                }
+            }
+
+            List<double> allXValues = new List<double>();
+            allXValues.AddRange(inputDataPoints.Select(p => p.x));
+            allXValues.AddRange(originalFunctionPlotPoints.Select(p => p.x));
+            allXValues.AddRange(approximatedFunctionPlotPoints.Select(p => p.x));
+
+            List<double> allYValues = new List<double>();
+            allYValues.AddRange(inputDataPoints.Select(p => p.y));
+            allYValues.AddRange(originalFunctionPlotPoints.Select(p => p.y));
+            allYValues.AddRange(approximatedFunctionPlotPoints.Select(p => p.y));
+
+            double minXGraph = allXValues.Any() ? allXValues.Min() : xPlotMin;
+            double maxXGraph = allXValues.Any() ? allXValues.Max() : xPlotMax;
+            double minYGraph = allYValues.Any() ? allYValues.Min() : -1;
+            double maxYGraph = allYValues.Any() ? allYValues.Max() : 1;
+
+            double xRange = maxXGraph - minXGraph;
+            if (Math.Abs(xRange) < 1e-9) xRange = 1.0;
+            minXGraph -= xRange * marginFactor;
+            maxXGraph += xRange * marginFactor;
+
+            double yRange = maxYGraph - minYGraph;
+            if (Math.Abs(yRange) < 1e-9 && Math.Abs(minYGraph) < 1e-9)
+            {
+                minYGraph = -1.0;
+                maxYGraph = 1.0;
+            }
+            else if (Math.Abs(yRange) < 1e-9)
+            {
+                minYGraph -= Math.Abs(minYGraph * marginFactor) + 0.5;
+                maxYGraph += Math.Abs(maxYGraph * marginFactor) + 0.5;
+            }
+            else
+            {
+                minYGraph -= yRange * marginFactor;
+                maxYGraph += yRange * marginFactor;
+            }
+
+            List<GraphParameters> graphData = new()
+            {
+
+                new(approximatedFunctionPlotPoints, markerSize: 0, lineWidth: 3, color: Color.Green, label: "Аппроксимирующая функция"),
+
+                new(originalFunctionPlotPoints, markerSize: 0, lineWidth: 2, color: Color.Aqua, label: "Исходная функция"),
+
+                new(inputDataPoints, markerSize: 15, lineWidth: 0, color: Color.Black, label: "Узлы аппроксимации")
+            };
+
+            return graphData;
+        }
     }
 }
