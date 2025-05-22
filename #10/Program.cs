@@ -4,12 +4,13 @@ namespace _10
 {
     internal class Program
     {
-        static Func<double, double> function = x => Math.Sin(x);
+        static Func<double, double> function = x => Math.Pow(x,2);
         static List<Func<double, double>> basis = new()
         {
             x => 1,
             x => x,
-            Math.Sqrt
+            Math.Sqrt,
+            x => 1/(x+1)
         };
 
         const double xMin = 0.0, xStep = 1.0;

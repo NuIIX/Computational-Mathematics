@@ -8,12 +8,12 @@ namespace BvpSolver
     /// </summary>
     internal static class Program
     {
-        private const double Epsilon = 1e-8;
-        private const double Step = 0.1;
+        private const double Epsilon = 1e-12;
+        private const double InitialStep = 0.1;
         private const double A = 0.0;
         private const double B = 1.0;
         private const double Ya = 1.0;
-        private const double Yb = 2.718281828459045;
+        private static readonly double Yb = Math.Exp(1);
 
         /// <summary>
         /// Точка входа в приложение
@@ -31,11 +31,11 @@ namespace BvpSolver
 
             var methodName = useRk4 ? "Рунге-Кутта 4-го порядка" : "Рунге-Кутта 2-го порядка";
             DrawHeader($"=== Метод стрельбы ({methodName}) ===");
-            double k0 = FindInitialSlope(-100.0, 100.0, useRk4);
+            double k0 = FindInitialSlope(-100.0, 100.0, InitialStep, useRk4);
             Console.WriteLine($"Найденное y'(0) = {k0:F13}\n");
 
             DrawHeader($"=== Подбор оптимального шага ({methodName}) ===");
-            double optimalH = AdjustStep(Epsilon, Step, Ya, k0, useRk4);
+            double optimalH = AdjustStep(Epsilon, InitialStep, Ya, k0, useRk4);
             Console.WriteLine($"Оптимальный шаг: {optimalH:E}\n");
 
             DrawHeader($"=== Итоговый прогон ({methodName}) ===");
@@ -43,7 +43,7 @@ namespace BvpSolver
                 ? RungeKutta4(A, B, optimalH, Ya, k0, true)
                 : RungeKutta2(A, B, optimalH, Ya, k0, true);
 
-            Console.WriteLine($"Результат в точке {B}: y = {result.Y:F6}, y' = {result.DY:F6}");
+            Console.WriteLine($"Результат в точке {B}: y = {result.Y:F14}, y' = {result.DY:F14}");
             Console.WriteLine($"Ожидаемое значение: {Yb}");
             Console.WriteLine($"Разница: {result.Y - Yb:E}\n");
 
@@ -94,12 +94,12 @@ namespace BvpSolver
         /// </summary>
         private static (double Y, double DY) RungeKutta4(double a, double b, double h, double y0, double dy0, bool print)
         {
-            int n = (int)Math.Round((b - a) / h) + 1;
+            int n = (int)Math.Ceiling((b - a) / h) + 1;
             double[] X = Enumerable.Range(0, n).Select(i => a + i * h).ToArray();
             double y = y0, dy = dy0;
 
             if (print)
-                Console.WriteLine($"x = {X[0]:F6} | y = {y:F6} | y' = {dy:F6}");
+                Console.WriteLine($"x = {X[0]:F14} | y = {y:F14} | y' = {dy:F14}");
 
             for (int i = 1; i < n; i++)
             {
@@ -112,7 +112,7 @@ namespace BvpSolver
                 dy += h / 6 * (k11 + 2 * k21 + 2 * k31 + k41);
 
                 if (print)
-                    Console.WriteLine($"x = {X[i]:F6} | y = {y:F6} | y' = {dy:F6}");
+                    Console.WriteLine($"x = {X[i]:F14} | y = {y:F14} | y' = {dy:F14}");
             }
             return (y, dy);
         }
@@ -122,12 +122,12 @@ namespace BvpSolver
         /// </summary>
         private static (double Y, double DY) RungeKutta2(double a, double b, double h, double y0, double dy0, bool print)
         {
-            int n = (int)Math.Round((b - a) / h) + 1;
+            int n = (int)Math.Ceiling((b - a) / h) + 1;
             double[] X = Enumerable.Range(0, n).Select(i => a + i * h).ToArray();
             double y = y0, dy = dy0;
 
             if (print)
-                Console.WriteLine($"x = {X[0]:F6} | y = {y:F6} | y' = {dy:F6}");
+                Console.WriteLine($"x = {X[0]:F14} | y = {y:F14} | y' = {dy:F14}");
 
             for (int i = 1; i < n; i++)
             {
@@ -138,7 +138,7 @@ namespace BvpSolver
                 dy += h * k21;
 
                 if (print)
-                    Console.WriteLine($"x = {X[i]:F6} | y = {y:F6} | y' = {dy:F6}");
+                    Console.WriteLine($"x = {X[i]:F14} | y = {y:F14} | y' = {dy:F14}");
             }
             return (y, dy);
         }
@@ -146,14 +146,14 @@ namespace BvpSolver
         /// <summary>
         /// Осуществляет метод стрельбы для поиска начального dy по краевому условию
         /// </summary>
-        private static double FindInitialSlope(double left, double right, bool useRk4)
+        private static double FindInitialSlope(double left, double right, double h, bool useRk4)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"Начальный интервал для k: [{left}, {right}]");
+            Console.WriteLine($"Начальный интервал для k: [{left}, {right}], шаг = {h}");
             Console.ResetColor();
 
-            double fa = ShotFunction(left, useRk4);
-            double fb = ShotFunction(right, useRk4);
+            double fa = ShotFunction(left, h, useRk4);
+            double fb = ShotFunction(right, h, useRk4);
             if (fa * fb >= 0)
                 throw new InvalidOperationException("f(a) и f(b) должны иметь разные знаки!");
 
@@ -163,9 +163,9 @@ namespace BvpSolver
             {
                 iter++;
                 mid = (left + right) / 2;
-                Console.WriteLine($"\nИтерация {iter}: интервал k = [{left:F8}, {right:F8}], проверяем k = {mid:F8}");
-                double fm = ShotFunction(mid, useRk4);
-                if (fm == 0) break;
+                Console.WriteLine($"\nИтерация {iter}: интервал k = [{left:F14}, {right:F14}], проверяем k = {mid:F14}");
+                double fm = ShotFunction(mid, h, useRk4);
+                if (Math.Abs(fm) < Epsilon) break;
                 if (fa * fm < 0)
                 {
                     right = mid;
@@ -178,21 +178,21 @@ namespace BvpSolver
                 }
             }
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"\nНайденный интервал для k: [{left:F8}, {right:F8}]");
+            Console.WriteLine($"\nНайденный интервал для k: [{left:F14}, {right:F14}]");
             Console.ResetColor();
             return (left + right) / 2;
         }
 
         /// <summary>
-        /// Вычисляет отклонение в точке b для заданного k
+        /// Вычисляет отклонение в точке b для заданного k и шага h
         /// </summary>
-        private static double ShotFunction(double k, bool useRk4)
+        private static double ShotFunction(double k, double h, bool useRk4)
         {
             var result = useRk4
-                ? RungeKutta4(A, B, Step, Ya, k, false)
-                : RungeKutta2(A, B, Step, Ya, k, false);
+                ? RungeKutta4(A, B, h, Ya, k, false)
+                : RungeKutta2(A, B, h, Ya, k, false);
             double error = result.Y - Yb;
-            Console.WriteLine($"k = {k:F8} => y({B}) = {result.Y:F6}, отклонение = {error:E}");
+            Console.WriteLine($"k = {k:F14} => y({B}) = {result.Y:F14}, отклонение = {error:E}");
             return error;
         }
 
@@ -208,7 +208,7 @@ namespace BvpSolver
                     ? RungeKutta4(A, B, h, y0, dy0, false)
                     : RungeKutta2(A, B, h, y0, dy0, false);
                 double error = Math.Abs(result.Y - Yb);
-                Console.WriteLine($"h = {h:E}, y(b) = {result.Y:F6}, ошибка = {error:E}");
+                Console.WriteLine($"h = {h:E}, y(b) = {result.Y:F14}, ошибка = {error:E}");
                 if (error < eps)
                 {
                     Console.WriteLine($"Достигнута точность {eps:E}: оптимальный шаг = {h:E}");
